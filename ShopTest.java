@@ -46,18 +46,35 @@ public class ShopTest {
         if (failed > 0) {
             System.exit(1);
         }
-
     }
+    // ---- Partition : ว่าง / มีสินค้า / input ผิดเงื่อนไข ----
     private static void testCreators() {
         System.out.println("--- Creator ---");
 
         Shop empty = new Shop();
         check("new()-> empty",empty.size()==0);
         check("new() -> contains nothing", !empty.contains("anything"));
-     
+
+        Shop sp = new Shop(Arrays.asList("A","B","c"));
+        check("new(item) -> size 3",sp.size() ==3);
+
+        // input ผิดเงื่อนไข
+        boolean threwNull = false;
+        try {
+             new Shop(null);
+        } catch (Exception e) {
+           threwNull = true;
+        }
+        check("new(null) -> throws IllegalArgumentException", threwNull);
+
     }
+    // ----- Mutator : add ----
     private static void testAdd() {
+        System.out.println("\n --- Add items ---");
         
+        Shop additem = new Shop();
+        check("add(A) -> return true",additem.add("A"));
+        check("add(A) -> size 1",additem.size()==1);
     }
     private static void testRemove() {
         

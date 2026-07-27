@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.IIOImage;
+
 public class Shop {
     public static final int Max_items = 50;
    
@@ -53,10 +55,8 @@ public class Shop {
             if (s==null||s.isEmpty()) throw new IllegalArgumentException();
             if (!seen.add(s)) throw new IllegalArgumentException();
          }
-          
         this.items = new ArrayList<>(condition);   
-         checkRep();
-        
+         checkRep();  
     }
      public int size(){
         return items.size();
@@ -64,15 +64,16 @@ public class Shop {
     public boolean contains(String item) {
         return items.contains(item);   
     }
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 
+     * @param item ต้องไม่เป็น null และไม่ว่างเปล่า
+     * @return true ถ้าเพิ่มสำเร็จ, false ถ้าตะกร้าสินค้าเต็มแล้ว
+     * @throws IllegalArgumentException ถ้า item เป็น null หรือไม่มี item
+     */
+    public boolean add(String item) {
+       if (item == null || item.isEmpty())throw new IllegalArgumentException();
+       if (items.size()>Max_items) return false;
+       items.add(item);
+        return true;
+    }
 }
