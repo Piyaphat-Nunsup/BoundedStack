@@ -1,10 +1,4 @@
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 public class ShopTest {
     /**
      * Test runner
@@ -31,11 +25,11 @@ public class ShopTest {
         System.out.println("--- items in the cart ---\n");
 
         testCreators();
-        testAdd();
-        testRemove();
+        testPush();
+        testPop();
         testObservers();
         testProducer();
-        testExposure();
+        
 
         System.out.println("\n=== Summary ===");
         System.out.println("Passed: " + passed);
@@ -49,15 +43,16 @@ public class ShopTest {
     }
     // ---- Partition : ว่าง / มีสินค้า / input ผิดเงื่อนไข ----
     private static void testCreators() {
-        System.out.println("--- Creator ---");
-
+        System.out.println(" --- Creator ---");
+        // ตะกร้าสินค้าว่าง
         Shop empty = new Shop();
         check("new()-> empty",empty.size()==0);
         check("new() -> contains nothing", !empty.contains("anything"));
 
+        // มีสินค้า
         Shop sp = new Shop(Arrays.asList("A","B","c"));
         check("new(item) -> size 3",sp.size() ==3);
-
+       
         // input ผิดเงื่อนไข
         boolean threwNull = false;
         try {
@@ -66,28 +61,44 @@ public class ShopTest {
            threwNull = true;
         }
         check("new(null) -> throws IllegalArgumentException", threwNull);
-
     }
-    // ----- Mutator : add ----
-    private static void testAdd() {
+    // Mutator : การเพิ่มสินค้า
+    private static void testPush() {
         System.out.println("\n --- Add items ---");
         
         Shop additem = new Shop();
-        check("add(A) -> return true",additem.add("A"));
+        check("add(A) -> return true",additem.push("A"));
         check("add(A) -> size 1",additem.size()==1);
     }
-    private static void testRemove() {
-        
-    }
+    /**
+     *  Mutator : การลบสินค้า
+     *  stack ลดลงเมื่อ pop
+     *  ตัวที่โดน pop ไปแล้วจะไม่เจออีก
+     *  stack ว่างเมื่อ pop ทุกตัว
+    */ 
+     private static void testPop(){
+    System.out.println("=== Pop Test ===");
 
+    Shop shop = new Shop(Arrays.asList("A","B","C"));
+    check("pop returns C",shop.pop().equals("C"));
+    check("size decreases",shop.size() == 2);
+    check("C was removed",!shop.contains("C"));
+    check("next pop returns B",shop.pop().equals("B"));
+    check("next pop returns A",shop.pop().equals("A"));
+    check("stack is empty",shop.size() == 0);
+
+    }
+    // ดึงค่าสินค้ามาโชว์
     private static void testObservers() {
+        System.out.println("--- Observer ---");
         
+        Shop ob = new Shop(Arrays.asList("A","B"));
+        check("size is 2", ob.size()==2);
+        check("find a item", ob.contains("A"));
+        check("Can't find item", !ob.contains("C"));
     }
     private static void testProducer() {
+        System.out.println("--- Producer ---");
        
     }
-    private static void testExposure() {
-       
-    }
-   
 }

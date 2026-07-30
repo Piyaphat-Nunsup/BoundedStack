@@ -1,14 +1,6 @@
-
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.imageio.IIOImage;
-
+import java.util.*;
 public class Shop {
-    public static final int Max_items = 50;
+    public final int Max_items = 50;
    
     // ===== representation =====
     private final List<String> items;
@@ -56,24 +48,41 @@ public class Shop {
             if (!seen.add(s)) throw new IllegalArgumentException();
          }
         this.items = new ArrayList<>(condition);   
-         checkRep();  
+        checkRep();  
     }
-     public int size(){
+    public int size(){
         return items.size();
     }
     public boolean contains(String item) {
         return items.contains(item);   
     }
     /**
-     * 
+     * เพิ่มสินค้าลงในตะกร้า
      * @param item ต้องไม่เป็น null และไม่ว่างเปล่า
      * @return true ถ้าเพิ่มสำเร็จ, false ถ้าตะกร้าสินค้าเต็มแล้ว
      * @throws IllegalArgumentException ถ้า item เป็น null หรือไม่มี item
      */
-    public boolean add(String item) {
+    public boolean push(String item) {
        if (item == null || item.isEmpty())throw new IllegalArgumentException();
        if (items.size()>Max_items) return false;
+       if (items.contains(item)) return false;
        items.add(item);
-        return true;
+       checkRep();
+       return true;
+    }
+    /**
+     * ลบสินค้าออกจากตะกร้า
+     * @param item สินค้าที่ต้องการลบ
+     * @return true ลบสินค้าสำเร็จ, false ถ้าไม่มีสินค้า
+     */
+    public List<String> items() {
+        return new ArrayList<>(items);   
+    }
+    public String pop(){
+        if(items.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        checkRep();
+        return items.remove(items.size()-1);
     }
 }
