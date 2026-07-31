@@ -1,8 +1,10 @@
 import java.util.*;
 public class Shop {
-    public final int Max_items = 50;
-   
-    // ===== representation =====
+    /**
+     * ฟังก์ชันรับค่า String ของสินค้า
+     * 6821651493 ปิยพัทธ์ หนุนทรัพย์
+     */
+    public  static final int Max_items = 50;
     private final List<String> items;
     //Abstraction Function:
     // AF(items) = ลำดับของสินค้าในตะกร้า items.get(0),items.get(1), ... ตามลำดับ
@@ -50,9 +52,17 @@ public class Shop {
         this.items = new ArrayList<>(condition);   
         checkRep();  
     }
+    /**
+     * คืนค่าจำนวนสินค้า
+     */
     public int size(){
         return items.size();
     }
+    /**
+     * ตรวจสอบว่าสินค้ามีอยู่จริงมั้ย
+     * @param item สินค้า
+     * @return ส่งค่าสิน้คากลับ
+     */
     public boolean contains(String item) {
         return items.contains(item);   
     }
@@ -70,19 +80,45 @@ public class Shop {
        checkRep();
        return true;
     }
-    /**
-     * ลบสินค้าออกจากตะกร้า
-     * @param item สินค้าที่ต้องการลบ
-     * @return true ลบสินค้าสำเร็จ, false ถ้าไม่มีสินค้า
-     */
     public List<String> items() {
         return new ArrayList<>(items);   
     }
+    /**
+     * ลบสินค้าออกจากตะกร้า
+     * @return ชื่อสินค้าที่อยู่บนสุด
+     * @throws EmptyStackException เมื่อตะกร้าว่าง
+     */
     public String pop(){
         if(items.isEmpty()) {
             throw new IllegalArgumentException();
         }
         checkRep();
         return items.remove(items.size()-1);
+    }
+    /**
+     * อ่านชื่อสินค้าโดยไม่ลบออก
+     * @return ส่งชื่อ items กลับ
+     */
+    public String peek(){
+        if (isEmpty()) throw new IllegalArgumentException();
+        return items.get(items.size()-1);
+    }
+    /**
+     * แก้ชื่อสินค้า
+     * @param item ชื่อสินค้าเดิม
+     * @param newitem ชื่อสินค้าใหม่
+     * @return ชื่อสินค้าที่เปลี่ยนใหม่
+    */
+    public String moreItem(String item,String newitem){
+        String new_item = item + newitem;
+        return new_item;
+    }
+    // ตะกร้าสินค้าเต็ม
+    public boolean isFull(){
+         return items.size() >= Max_items;
+    }
+    // ตะกร้าสินค้าว่าง
+    public boolean isEmpty(){
+        return items.isEmpty();
     }
 }
