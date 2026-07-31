@@ -19,8 +19,7 @@ public class ShopTest {
         boolean assertsOn = false;
         assert assertsOn = true;
         if (!assertsOn) {
-            System.out.println("WARNING: assertions disabled"
-                    + " - e-run with: java -ea PlaylistTest\n");
+            System.out.println("WARNING: assertions disabled"+ " - e-run with: java -ea PlaylistTest\n");
         }
         System.out.println("--- items in the cart ---\n");
 
@@ -30,7 +29,6 @@ public class ShopTest {
         testObservers();
         testProducer();
         
-
         System.out.println("\n=== Summary ===");
         System.out.println("Passed: " + passed);
         System.out.println("Failed: " + failed);
@@ -41,7 +39,7 @@ public class ShopTest {
             System.exit(1);
         }
     }
-    // ---- Partition : ว่าง / มีสินค้า / input ผิดเงื่อนไข ----
+    // ---- Partition : ตะกร้าสินค้าว่าง / มีสินค้า / ตะกร้าสินค้าไม่เป็น null
     private static void testCreators() {
         System.out.println(" --- Creator ---");
         // ตะกร้าสินค้าว่าง
@@ -50,15 +48,18 @@ public class ShopTest {
         check("new() -> contains nothing", !empty.contains("anything"));
 
         // มีสินค้า
-        Shop sp = new Shop(Arrays.asList("A","B","c"));
+        Shop sp = new Shop(Arrays.asList("doll","ball","cloth"));
+        check("Items in cart == 1",sp.contains("doll"));
+        check("Items in cart == 2",sp.contains("ball"));
+        check("Items in cart == 3",sp.contains("cloth"));
         check("new(item) -> size 3",sp.size() ==3);
        
         // input ผิดเงื่อนไข
         boolean threwNull = false;
         try {
-             new Shop(null);
+          new Shop(null);
         } catch (Exception e) {
-           threwNull = true;
+          threwNull = true;
         }
         check("new(null) -> throws IllegalArgumentException", threwNull);
     }
@@ -67,8 +68,26 @@ public class ShopTest {
         System.out.println("\n --- Add items ---");
         
         Shop additem = new Shop();
-        check("add(A) -> return true",additem.push("A"));
-        check("add(A) -> size 1",additem.size()==1);
+        additem.push("Cloths");
+        check("add(Cloths) -> return true",additem.contains("Cloths"));
+        check("add(Cloths) -> size 1",additem.size()==1);
+        check("Items is Cloths", additem.peek() == "Cloths");
+
+        boolean threwempty = false;
+        try {
+            additem.push("");
+        } catch (Exception e) {
+            threwempty = true;
+        }
+        check("Cart is empty", threwempty);
+
+        Shop full = new Shop();
+        for (int i = 0; i < Shop.Max_items; i++) {
+            full.push("Shop"+i);
+        }
+        check("When is full", full.isFull());
+        check("Can't fill item", full.size() == Shop.Max_items);
+        check("Cart stay max!!!", full.size() == Shop.Max_items);
     }
     /**
      *  Mutator : การลบสินค้า
@@ -92,13 +111,18 @@ public class ShopTest {
     private static void testObservers() {
         System.out.println("--- Observer ---");
         
-        Shop ob = new Shop(Arrays.asList("A","B"));
-        check("size is 2", ob.size()==2);
-        check("find a item", ob.contains("A"));
-        check("Can't find item", !ob.contains("C"));
+        Shop ob = new Shop();
+        check("Item in cart -> Cloth",ob.push("Cloth"));
+        check("Item in cart -> Cloth,Jean",ob.push("Jean"));
+        check("size is -> 2", ob.size()==2);
+        check("find a item -> Cloth", ob.contains("Cloth"));
+        check("Can't find item -> Jeanbaggy", !ob.contains("Jeanbaggy"));
     }
+    // แก้ไขจากชื่อสินค้าเดิม
     private static void testProducer() {
         System.out.println("--- Producer ---");
-       
+
+        Shop newitem = new Shop(Arrays.asList("Cloth","Jean","telephone"));
+        check("new item is Jeanbaggy", newitem.moreItem("Jean", "baggy").equals("Jeanbaggy"));
     }
 }
